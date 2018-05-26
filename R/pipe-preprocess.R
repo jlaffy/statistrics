@@ -16,29 +16,40 @@
 #' @return centered, log-transformed matrix consisting of only high-quality -- user-defined -- cells and genes)
 #' @export
 #'
-preprocess.old <- function(mat, complexity.cutoff, genes.cutoff, logTransform=TRUE, ...) {
-  if (isTRUE(logTransform)) mat <- logTPM(tpm=as.matrix(mat), ...)
-  cut_cells <- complexityCut(mat, cutoff=complexity.cutoff)
-  cut_genes <- genesCut(cut_cells, cutoff=genes.cutoff)
-  center(cut_genes, cellcols=TRUE)
-}
-
 preprocess <- function(mat,
                        logTransform=TRUE,
                        complexity.cutoff=3000,
-                       genes.cutoff=4,
-                       ...) {
+                       genes.cutoff=4) {
 
   mat <- as.matrix(mat)
 
   if (isTRUE(logTransform)) {
-    mat <- cacheCall::cacheCall(pipeName=pipeName, fnName='logTPM', args=args, cachePath=cachePath, tpm=mat)
-  }
-  cut_cells <- cacheCall::cacheCall(pipeName=pipeName, fnName='complexityCut', args=args, cachePath=cachePath, mat=mat, cutoff=complexity.cutoff)
+    mat <- cacheCall::cacheCall(pipeName=pipeName,
+                                fnName='logTPM',
+                                args=args,
+                                cachePath=cachePath,
+                                tpm=mat)}
 
-  cut_genes <- cacheCall::cacheCall(pipeName=pipeName, fnName='genesCut', args=args, cachePath=cachePath, mat=cut_cells, cutoff=genes.cutoff)
+    cut_cells <- cacheCall::cacheCall(pipeName=pipeName,
+                                    fnName='complexityCut',
+                                    args=args,
+                                    cachePath=cachePath,
+                                    mat=mat,
+                                    cutoff=complexity.cutoff)
 
-  centered <- cacheCall::cacheCall(pipeName=pipeName, fnName='center', args=args, cachePath=cachePath, mat=cut_genes, cellcols=TRUE)
+  cut_genes <- cacheCall::cacheCall(pipeName=pipeName,
+                                    fnName='genesCut',
+                                    args=args,
+                                    cachePath=cachePath,
+                                    mat=cut_cells,
+                                    cutoff=genes.cutoff)
+
+  centered <- cacheCall::cacheCall(pipeName=pipeName,
+                                   fnName='center',
+                                   args=args,
+                                   cachePath=cachePath,
+                                   mat=cut_genes,
+                                   cellcols=TRUE)
 
   centered
 }

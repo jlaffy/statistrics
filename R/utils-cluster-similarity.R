@@ -57,7 +57,7 @@ jaccard <- function(x, y, jac.cut=0.5, test=TRUE) {
 #'
 #' @param x list of named vectors. Vectors are assumed to be ordered from most to least significant, such that of two vectors with a similarity score higher than the cut-off, the higher-placed vector will be kept and the lower-placed vector will be thrown.
 #' @param out vectors that passed jaccard test.
-#' @param jac.cut jaccard value cut off. arg to \code{jaccard_test}.
+#' @param jac.cut jaccard value cut off. arg to \code{jaccard}.
 #'
 #' @return list of i) x: names of vectors that passed jaccard test and ii) out: vectors that passed jaccard test.
 #' @export
@@ -100,6 +100,16 @@ jaccard_filter <- function(x, out=NULL, jac.cut=0.75) {
 # CLUSTER SIMILARITY CUT
 # ==============================================================
 
+#' Title
+#'
+#' @param obj
+#' @param jac.out
+#' @param jac.cut
+#'
+#' @return
+#' @export
+#'
+#' @examples
 hcsim_cut <- function(obj, jac.out=NULL, jac.cut=0.75) {
 
   obj <- input_check(obj)

@@ -1,3 +1,11 @@
+#' Top Genes across Programs
+#'
+#' @param Programs list of character vectors. Each vector is a program
+#' @param cutoff a numeric value indicating how many top genes to return.
+#'
+#' @return table of top genes and their counts across programs
+#' @export
+#'
 top_program_genes <- function(Programs, cutoff=50) {
 
   sort(table(unlist(Programs)), decreasing=T)[1:cutoff]
@@ -5,6 +13,14 @@ top_program_genes <- function(Programs, cutoff=50) {
 }
 
 
+#' Programs
+#'
+#' @param List list of named numeric vectors. Numbers are p-values and names are genes.
+#' @param cutoff a numeric value indicating the cutoff for program size
+
+#' @return list of character vectors. Each vector is a program
+#' @export
+#'
 program <- function(List, cutoff=50) {
 
   if (is.null(cutoff)) {
@@ -23,6 +39,16 @@ program <- function(List, cutoff=50) {
 }
 
 
+#' Program Scores
+#'
+#' @param mat a matrix of gene expression data (cells by genes)
+#' @param programs either a single or a list of character vectors (genes). Each vector is a program.
+#' @param many boolean. If TRUE, <programs> arg is a list of vectors, each of which scores will be calculated for.
+#' @param center if TRUE, the resulting score matrix is centered.
+#'
+#' @return list (if many=F) or matrix (if many=T) of program scores
+#' @export
+#'
 score <- function(mat, programs, many=TRUE, center=TRUE) {
 
   .score <- function(mat, program) {

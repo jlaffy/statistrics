@@ -17,18 +17,19 @@
 #'
 #'
 #' @param mat a matrix of gene expression data (cells by genes)
+#' @param pipeName a job ID, a name for the project/pipeline. Defaults to function name.
 #' @param cachePath passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.
 #' @param sep passed to  \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".
 #' @param collapse passed to \code{cacheCall::cacheCall}. A character to separate arguments(+names) from one another. Defaults to "__".
-#' @param method.cor a character string defining the distance metric for calculating correlations. Defaults to 'pearson'.
-#' @param method.hc a character string defining the type of linkage used in the hierarchical clustering. Defaults to 'average'.
+#' @param method.cor a character string of the distance metric for calculating correlations. Defaults to 'pearson'.
+#' @param method.hc a character string of the type of linkage used in the hierarchical clustering. Defaults to 'average'.
 #' @param dissim.dist a numeric value setting the maximum dissimilarity (prior to rescaling between 0 and 1).
 #' @param size.cut a boolean indicating whether outputted list of all possible clusters (post-hierarchical clustering) should be filtered based on size (too big or too small).
 #' @param min.size a numeric value (ABSOLUTE) for the minimum cluster size (if size.cut=TRUE). Defaults to 5, such that any cluster with < 5 cells is filtered out.
-#' @param max.size a numeric value (FRAC. of total) for the maximum cluster size (if size.cut=TRUE). Defaults to 0.5, such that any cluster with >50% of total cell number is filtered out.
-#' @param fc.value a numeric value for the minimum fold change of a gene that is counted as differentially expressed. Defaults to 3.
+#' @param max.size a numeric value (FRAC. of total) for the maximum cluster size (if size.cut=TRUE). Defaults to 0.5, such that any cluster with more than half of total cell number is filtered out.
+#' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
-#' @param p.value a numeric value for the minimum p.value of a gene that is counted as significantly differentially expressed. Defaults to 10^(-4).
+#' @param p.value p-value above which differential gene expression is deemed insignificant.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
 #' @param reorder.by.sig if TRUE, the list of clusters is reordered by most to least significant.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.
@@ -68,7 +69,7 @@ main <- function(mat,
 							 fnName='hcluster',
 							 args=args,
 							 cachePath=cachePath,
-                             mat=mat,
+               mat=mat,
 							 method.cor=method.cor,
 							 method.hc=method.hc,
 							 dissim.dist=dissim.dist)
@@ -77,7 +78,7 @@ main <- function(mat,
 							fnName='hcutree',
 							args=args,
 							cachePath=cachePath,
-                            hc=hc,
+              hc=hc,
 							h=hc$height,
 							clean=size.cut,
 							min=min.size,
@@ -87,19 +88,19 @@ main <- function(mat,
 								   fnName='hcsig',
 								   args=args,
 								   cachePath=cachePath,
-                                   k=k,
+                   k=k,
 								   mat=mat,
 								   fc.value=fc.value,
 								   p.value=p.value,
 								   fc.sort=fc.sort,
-                                   pval.sort=pval.sort,
+                   pval.sort=pval.sort,
 								   reorder=reorder.by.sig)
 
   hcsigCut <- cacheCall::cacheCall(pipeName=pipeName,
 								   fnName='hcsig_cut',
 								   args=args,
 								   cachePath=cachePath,
-                                   obj=hcsigObj,
+                   obj=hcsigObj,
 								   n.sig.1=n.sig.1,
 								   n.sig.2=n.sig.2)
 
@@ -107,14 +108,14 @@ main <- function(mat,
 								   fnName='hcsim_cut',
 								   args=args,
 								   cachePath=cachePath,
-                                   obj=hcsigCut,
+                   obj=hcsigCut,
 								   jac.cut=jac.cut)
 
   Programs <- cacheCall::cacheCall(pipeName=pipeName,
 								   fnName='program',
 								   args=args,
 								   cachePath=cachePath,
-                                   List=hcsimCut$sig.1,
+                   List=hcsimCut$sig.1,
 								   cutoff=program.cutoff)
 
   Scores <- cacheCall::cacheCall(pipeName=pipeName,
