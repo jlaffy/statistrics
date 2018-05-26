@@ -63,7 +63,7 @@ main <- function(mat,
 
   if (is.null(mat)) stop("'Mat' must be provided.")
 
-  args <- as.list(environment())[-c(1:4, 20)]
+  args <- as.list(environment())[-c(1:5)]
 
   hc <- cacheCall::cacheCall(pipeName=pipeName,
 							 fnName='hcluster',
