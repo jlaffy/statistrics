@@ -8,6 +8,8 @@
 #' since s.d. values are very skewed due to how sparse the scRNA data is (many 0s).
 #'
 #' @param mat matrix of vars. by. obs. (in TPM or logTPM).
+#' @param pipeName a job ID, a name for the project/pipeline. Defaults to function name.
+#' @param cachePath passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.
 #' @param complexity.cutoff passed to \code{cutoff} parameter in complexityCut.
 #' @param genes.cutoff passed to \code{cutoff} parameter in genesCut.
 #' @param logTransform if TRUE, apply \code{logTPM} to matrix.
@@ -17,9 +19,15 @@
 #' @export
 #'
 preprocess <- function(mat,
+                       pipeName="preprocess",
+                       cachePath=".",
                        logTransform=TRUE,
                        complexity.cutoff=3000,
                        genes.cutoff=4) {
+
+  if (is.null(mat)) stop("'Mat' must be provided.")
+
+  args <- as.list(environment())[-c(1:4)]
 
   mat <- as.matrix(mat)
 
