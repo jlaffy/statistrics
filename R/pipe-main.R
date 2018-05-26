@@ -10,16 +10,16 @@
 #' 4. The DE genes defining each cell cluster are used to define cell programs.
 #' These programs are sets of coherently expressed genes in the data.
 #'
-#' The output of each step in the pipeline is saved as a .rds file in `cachePath`.
+#' The output of each step in the pipeline is saved as a .rds file in \code{cachePath}.
 #' If the step has been run before, the saved file will be read in in place of step/function execution, saving runtime.
-#' This is enabled by wrapping each function/step in the pipeline with a call to `cacheCall:cacheCall()`.
-#' See `?cacheCall::cacheCall` for more details.
+#' This is enabled by wrapping each function/step in the pipeline with a call to \code{cacheCall:cacheCall()}.
+#' See \code{?cacheCall::cacheCall} for more details.
 #'
 #'
 #' @param mat a matrix of gene expression data (cells by genes)
-#' @param cachePath passed to `cacheCall::cacheCall`. A character string providing path to the Cache directory.
-#' @param sep passed to `cacheCall::cacheCall`. A character to separate arguments and their names. Defaults to ":".
-#' @param collapse passed to `cacheCall::cacheCall`. A character to separate arguments(+names) from one another. Defaults to "__".
+#' @param cachePath passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.
+#' @param sep passed to  \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".
+#' @param collapse passed to \code{cacheCall::cacheCall}. A character to separate arguments(+names) from one another. Defaults to "__".
 #' @param method.cor a character string defining the distance metric for calculating correlations. Defaults to 'pearson'.
 #' @param method.hc a character string defining the type of linkage used in the hierarchical clustering. Defaults to 'average'.
 #' @param dissim.dist a numeric value setting the maximum dissimilarity (prior to rescaling between 0 and 1).
