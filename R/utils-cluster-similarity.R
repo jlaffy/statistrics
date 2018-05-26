@@ -38,11 +38,12 @@ jaccard <- function(x, y, jac.cut=0.5, test=TRUE) {
 		 class(jac.cut),
 		 ". Arg must be numeric.",
 		 sep="")
+  }
 
   else if (!is.null(jac.cut)) {
-
-	if(jac <= jac.cut) return(TRUE)
-	else return(FALSE)
+    if(jac <= jac.cut) return(TRUE)
+    else return(FALSE)
+  }
 }
 
 
