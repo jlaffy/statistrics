@@ -4,11 +4,15 @@
 \alias{preprocess}
 \title{PreProcess Expression Matrix}
 \usage{
-preprocess(mat, logTransform = TRUE, complexity.cutoff = 3000,
-  genes.cutoff = 4)
+preprocess(mat, pipeName = "preprocess", cachePath = ".",
+  logTransform = TRUE, complexity.cutoff = 3000, genes.cutoff = 4)
 }
 \arguments{
 \item{mat}{matrix of vars. by. obs. (in TPM or logTPM).}
+
+\item{pipeName}{a job ID, a name for the project/pipeline. Defaults to function name.}
+
+\item{cachePath}{passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.}
 
 \item{logTransform}{if TRUE, apply \code{logTPM} to matrix.}
 

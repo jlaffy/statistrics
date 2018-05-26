@@ -8,6 +8,8 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), reorder = TRUE,
   fc.sort = T, pval.sort = F)
 }
 \arguments{
+\item{mat}{a matrix of gene expression data (cells by genes)}
+
 \item{fc.value}{fold change value below which differential gene expression is deemed insignificant.}
 
 \item{p.value}{p-value above which differential gene expression is deemed insignificant.}
