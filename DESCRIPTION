@@ -1,5 +1,5 @@
 Package: statistrics
-Version: 0.0.0.9000
+Version: 1.0.0.0000
 Title: Basic Statistics For Single-Cell (or bulk) RNA Analyses
 Description: Basic Statistics For Single-Cell (or bulk) RNA Analyses.
 Authors@R: person("Julie", "Laffy", email = "julie.laffy@weizmann.ac.il", role = c("aut", "cre"))
