@@ -8,6 +8,8 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), reorder = TRUE,
   fc.sort = T, pval.sort = F)
 }
 \arguments{
+\item{k}{a list of character vectors; sets of cell members belonging to each cluster.}
+
 \item{mat}{a matrix of gene expression data (cells by genes)}
 
 \item{fc.value}{fold change value below which differential gene expression is deemed insignificant.}
@@ -19,6 +21,9 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), reorder = TRUE,
 \item{fc.sort}{if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.}
 
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.}
+}
+\value{
+list of length 3. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 }
 \description{
 hcluster Significance. For clusters derived from hierarchical clustering (with \code{hclust}), data is retrieved.

@@ -78,9 +78,9 @@ p_val <- function(a, b, p.value=NULL, adjust.method=NULL){
 #' @param p.value arg to \code{p_val}. NULL or numeric. If NULL, return all p-values. If numeric, return p-values <= p.value.
 #' @param fc.value arg to \code{fold_change}. NULL or numeric. If NULL, return all FC values. If numeric, return FC values >= fc.value.
 #' @param ... other args passed to \code{fold_change} or \code{p_val}.
-#' @param fc.sort
-#' @param pval.sort
-#' @param adjust.method
+#' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
+#' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
+#' @param adjust.method NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #'
 #' @return one of: i) all p-values for all fold changes (if fc.value == NULL & p.value == NULL) ii/iii) all/signifcant p-values for significant/all fold changes or iv) signifcant p-values for significant fold changes (if fc.value != NULL & p.value != NULL).
 #' @export
@@ -105,14 +105,14 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
 
 #' Differentially Expressed Genes Between Two Groups
 #'
-#' @param k character vector of vars, for which a subgroup will have DE genes calculated.
+#' @param k a list of character vectors; sets of cell members belonging to each cluster.
 #' @param mat matrix of vars. vs. obs. matrix is split into two: i) vars that are in k; ii) vars not in k.
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
 #' @param ... other args to be passed to \code{p_val} or \code{fold_change} through call to \code{sig}.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
-#' @param adjust.method
+#' @param adjust.method NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #'
 #' @return numeric vector of p-values named with gene names.
 #' @export
@@ -134,7 +134,7 @@ DEgenes <- function(k, mat, fc.value=3, p.value=10^(-4), fc.sort=T, pval.sort=F,
 #' Most significant occurrence of each gene.
 #' The data generated allows the parameter n.sig.2 to be generated,
 #' for the number of genes in a cluster with the most significant occurrences.
-#' @param List
+#' @param List a list of named numeric vectors. Names: genes; values: their p-values; vectors: clusters derived from statistrics::hcluster.
 #' @param by 'small' or 'large' depending on whether the most significant values are the smallest (eg. p-value) or largest (eg. fold change).
 #'
 #' @return the inputted List after filtering such that each gene only appears once in the cluster where it is most significant.
@@ -167,7 +167,7 @@ most_significant <- function(List, by='small') {
 #' hcsig: hcluster Significance
 #'
 #' hcluster Significance. For clusters derived from hierarchical clustering (with \code{hclust}), data is retrieved.
-#' @param k
+#' @param k a list of character vectors; sets of cell members belonging to each cluster.
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
@@ -175,7 +175,7 @@ most_significant <- function(List, by='small') {
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.
 #'
-#' @return
+#' @return list of length 3. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 #' @export
 #'
 hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, pval.sort=F) {
@@ -210,17 +210,16 @@ hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, 
 # CLUSTER SIGNIFICANCE CUT
 # ==============================================================
 
-#' Title
+#' Cluster Significance Cut
 #'
-#' @param obj
+#' @param obj hcsig object. Please refer to \code{statistrics::hcsig}.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.
 #' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.
-#' @param by
+#' @param by if 'either': clusters may pass the significance test by n.sig.1 OR n.sig.2. If 'both': clusters must pass the significance test by n.sig.1 and n.sig.2.
 #'
-#' @return
+#' @return an hcsig object (the same structure and data types as the input) filtered to include only significant clusters.
 #' @export
 #'
-#' @examples
 hcsig_cut <- function(obj, n.sig.1=50, n.sig.2=10, by='either'){
 
   obj <- input_check(obj)

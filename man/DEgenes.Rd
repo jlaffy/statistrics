@@ -8,7 +8,7 @@ DEgenes(k, mat, fc.value = 3, p.value = 10^(-4), fc.sort = T,
   pval.sort = F, adjust.method = NULL, ...)
 }
 \arguments{
-\item{k}{character vector of vars, for which a subgroup will have DE genes calculated.}
+\item{k}{a list of character vectors; sets of cell members belonging to each cluster.}
 
 \item{mat}{matrix of vars. vs. obs. matrix is split into two: i) vars that are in k; ii) vars not in k.}
 
@@ -20,7 +20,7 @@ DEgenes(k, mat, fc.value = 3, p.value = 10^(-4), fc.sort = T,
 
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.}
 
-\item{adjust.method}{}
+\item{adjust.method}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{...}{other args to be passed to \code{p_val} or \code{fold_change} through call to \code{sig}.}
 }

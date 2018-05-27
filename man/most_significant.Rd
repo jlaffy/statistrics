@@ -7,6 +7,8 @@
 most_significant(List, by = "small")
 }
 \arguments{
+\item{List}{a list of named numeric vectors. Names: genes; values: their p-values; vectors: clusters derived from statistrics::hcluster.}
+
 \item{by}{'small' or 'large' depending on whether the most significant values are the smallest (eg. p-value) or largest (eg. fold change).}
 }
 \value{

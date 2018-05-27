@@ -2,17 +2,22 @@
 % Please edit documentation in R/utils-cluster-significance.R
 \name{hcsig_cut}
 \alias{hcsig_cut}
-\title{Title}
+\title{Cluster Significance Cut}
 \usage{
 hcsig_cut(obj, n.sig.1 = 50, n.sig.2 = 10, by = "either")
 }
 \arguments{
+\item{obj}{hcsig object. Please refer to \code{statistrics::hcsig}.}
+
 \item{n.sig.1}{significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.}
 
 \item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.}
 
-\item{by}{}
+\item{by}{if 'either': clusters may pass the significance test by n.sig.1 OR n.sig.2. If 'both': clusters must pass the significance test by n.sig.1 and n.sig.2.}
+}
+\value{
+an hcsig object (the same structure and data types as the input) filtered to include only significant clusters.
 }
 \description{
-Title
+Cluster Significance Cut
 }

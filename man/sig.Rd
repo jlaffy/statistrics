@@ -16,7 +16,11 @@ sig(a, b, p.value, fc.value = 3, fc.sort = F, pval.sort = F,
 
 \item{fc.value}{arg to \code{fold_change}. NULL or numeric. If NULL, return all FC values. If numeric, return FC values >= fc.value.}
 
-\item{adjust.method}{}
+\item{fc.sort}{if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.}
+
+\item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.}
+
+\item{adjust.method}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{...}{other args passed to \code{fold_change} or \code{p_val}.}
 }

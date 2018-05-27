@@ -102,14 +102,13 @@ jaccard_filter <- function(x, out=NULL, jac.cut=0.75) {
 
 #' Title
 #'
-#' @param obj
-#' @param jac.out
-#' @param jac.cut
+#' @param obj hcsig object. Please refer to the documentation for \code{statistrics::hcsig}.
+#' @param jac.out the output vector. Usually and by default equal to NULL -- the clusters that pass jaccard similarity will be added to an empty vector.
+#' @param jac.cut the cutoff for jaccard similarity.
 #'
-#' @return
+#' @return an hcsig object (the same structure and data types as the input) filtered to include only non-similar clusters according to \code{jac.cut} val.
 #' @export
 #'
-#' @examples
 hcsim_cut <- function(obj, jac.out=NULL, jac.cut=0.75) {
 
   obj <- input_check(obj)
