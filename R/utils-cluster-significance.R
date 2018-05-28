@@ -57,6 +57,10 @@ fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3) {
 p_val <- function(a, b, p.value=NULL, adjust.method=NULL){
 # p_val <- function(a, b, p.value=NULL, adjust.method="bonferroni"){
 
+  if (nrow(a) < 1) {
+	stop("At least one gene/obesrvation is needed for the t.test.")
+  }
+
   p <- sapply(1:nrow(a), function(i) stats::t.test( a[i,], b[i,] )$p.value)
 
   if (!is.null(adjust.method)) p <- stats::p.adjust(p, method=adjust.method)
@@ -93,8 +97,8 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
 
   else if (length(fc) > 0){
     if (isTRUE(fc.sort)) fc <- sort(fc, decreasing=T)
-    a <- a[names(fc), ]
-    b <- b[names(fc), ]
+    a <- a[names(fc), , drop=F]
+    b <- b[names(fc), , drop=F]
 
     pval <- p_val(a, b, p.value=p.value, adjust.method=adjust.method, ...)
     if (isTRUE(pval.sort)) pval <- sort(pval, decreasing=F)
@@ -118,8 +122,8 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
 #' @export
 #'
 DEgenes <- function(k, mat, fc.value=3, p.value=10^(-4), fc.sort=T, pval.sort=F, adjust.method=NULL, ...) {
-  a <- mat[, k]
-  b <- mat[, !colnames(mat) %in% k]
+  a <- mat[, k, drop=F]
+  b <- mat[, !colnames(mat) %in% k, drop=F]
   out <- sig(a, b, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort, adjust.method=adjust.method, ...)
   out
 }
@@ -181,6 +185,9 @@ most_significant <- function(List, by='small') {
 hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, pval.sort=F) {
 
   sig.1 <- lapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort))
+#   sig.1 <- lapply(1:length(k), function(i) {
+# 					print(names(k)[i])
+# 					DEgenes(k=k[[i]], mat=mat, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort) })
 
   sig.2 <- most_significant(sig.1)
 
