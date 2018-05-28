@@ -57,6 +57,10 @@ score <- function(mat, programs, many=TRUE, center=TRUE) {
 
   if (isTRUE(many)) {
     result <- lapply(programs, function(program) .score(mat=mat, program=program))
+	result <- do.call(cbind, result)
+	colnames(result) <- paste("P", 1:ncol(result), sep="")
+	rownames(result) <- colnames(mat)
+	result
   }
 
 
