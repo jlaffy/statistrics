@@ -67,6 +67,10 @@ hcutree <- function(hc,
     k <- hclean(k, n=ncol(cut) + 1, min=min, max=max)
   }
 
+  if (length(k) == 0) {
+	stop("No clusters to retrieve. Check your starting number of variables and min and max values.")
+  }
+
   names(k) <- 1:length(k)
 
   k
