@@ -197,7 +197,7 @@ hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, 
 
   sig.1.zeros <- sig.1[!names(sig.1) %in% names(sig.2)]
 
-  sig.2 <- c(sig.2, sig.1.zeros)
+  sig.2 <- c(sig.2, sig.1.zeros)[names(sig.1)]
 
     if (isTRUE(reorder)) {
 
