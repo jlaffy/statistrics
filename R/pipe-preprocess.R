@@ -23,7 +23,8 @@ preprocess <- function(mat,
                        cachePath=".",
                        logTransform=TRUE,
                        complexity.cutoff=3000,
-                       genes.cutoff=4) {
+                       genes.cutoff=4,
+					   centering=TRUE) {
 
   if (is.null(mat)) stop("'Mat' must be provided.")
 
@@ -52,12 +53,17 @@ preprocess <- function(mat,
                                     mat=cut_cells,
                                     cutoff=genes.cutoff)
 
-  centered <- cacheCall::cacheCall(pipeName=pipeName,
-                                   fnName='center',
-                                   args=args,
-                                   cachePath=cachePath,
-                                   mat=cut_genes,
-                                   cellcols=TRUE)
+  if (isTRUE(centering)) {
+    centered <- cacheCall::cacheCall(pipeName=pipeName,
+                                     fnName='center',
+                                     args=args,
+                                     cachePath=cachePath,
+                                     mat=cut_genes,
+                                     cellcols=TRUE)
 
-  centered
+    return(centered)
+  }
+
+  cut_genes
+
 }
