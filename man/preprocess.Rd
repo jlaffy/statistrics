@@ -5,7 +5,8 @@
 \title{PreProcess Expression Matrix}
 \usage{
 preprocess(mat, pipeName = "preprocess", cachePath = ".",
-  logTransform = TRUE, complexity.cutoff = 3000, genes.cutoff = 4)
+  logTransform = TRUE, complexity.cutoff = 3000, genes.cutoff = 4,
+  centering = TRUE)
 }
 \arguments{
 \item{mat}{matrix of vars. by. obs. (in TPM or logTPM).}
@@ -16,14 +17,14 @@ preprocess(mat, pipeName = "preprocess", cachePath = ".",
 
 \item{logTransform}{if TRUE, apply \code{logTPM} to matrix.}
 
-\item{complexity.cutoff}{passed to \code{cutoff} parameter in complexityCut.}
+\item{complexity.cutoff}{if a numeric value, apply \code{complexityCut} to matrix with cutoff \code{complexity.cutoff}. Else if FALSE, do not \code{complexityCut}.}
 
-\item{genes.cutoff}{passed to \code{cutoff} parameter in genesCut.}
+\item{genes.cutoff}{if a numeric value, apply \code{genesCut} to matrix with cutoff \code{genes.cutoff}. Else if FALSE, do not \code{genesCut}.}
 
-\item{...}{additional arguments to be passed to \code{logTPM}.}
+\item{centering}{if TRUE, apply \code{center} to matrix.}
 }
 \value{
-centered, log-transformed matrix consisting of only high-quality -- user-defined -- cells and genes)
+if all steps are run, return a centered, log-transformed matrix consisting of only high-quality -- user-defined -- cells and genes)
 }
 \description{
 If the data is passed in TPM form, the data is first transformed to logTPM.

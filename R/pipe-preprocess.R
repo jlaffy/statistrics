@@ -10,12 +10,12 @@
 #' @param mat matrix of vars. by. obs. (in TPM or logTPM).
 #' @param pipeName a job ID, a name for the project/pipeline. Defaults to function name.
 #' @param cachePath passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.
-#' @param complexity.cutoff passed to \code{cutoff} parameter in complexityCut.
-#' @param genes.cutoff passed to \code{cutoff} parameter in genesCut.
+#' @param complexity.cutoff if a numeric value, apply \code{complexityCut} to matrix with cutoff \code{complexity.cutoff}. Else if FALSE, do not \code{complexityCut}.
+#' @param genes.cutoff if a numeric value, apply \code{genesCut} to matrix with cutoff \code{genes.cutoff}. Else if FALSE, do not \code{genesCut}.
+#' @param centering if TRUE, apply \code{center} to matrix.
 #' @param logTransform if TRUE, apply \code{logTPM} to matrix.
-#' @param ... additional arguments to be passed to \code{logTPM}.
 #'
-#' @return centered, log-transformed matrix consisting of only high-quality -- user-defined -- cells and genes)
+#' @return if all steps are run, return a centered, log-transformed matrix consisting of only high-quality -- user-defined -- cells and genes)
 #' @export
 #'
 preprocess <- function(mat,
@@ -37,33 +37,36 @@ preprocess <- function(mat,
                                 fnName='logTPM',
                                 args=args,
                                 cachePath=cachePath,
-                                tpm=mat)}
-
-    cut_cells <- cacheCall::cacheCall(pipeName=pipeName,
-                                    fnName='complexityCut',
-                                    args=args,
-                                    cachePath=cachePath,
-                                    mat=mat,
-                                    cutoff=complexity.cutoff)
-
-  cut_genes <- cacheCall::cacheCall(pipeName=pipeName,
-                                    fnName='genesCut',
-                                    args=args,
-                                    cachePath=cachePath,
-                                    mat=cut_cells,
-                                    cutoff=genes.cutoff)
-
-  if (isTRUE(centering)) {
-    centered <- cacheCall::cacheCall(pipeName=pipeName,
-                                     fnName='center',
-                                     args=args,
-                                     cachePath=cachePath,
-                                     mat=cut_genes,
-                                     cellcols=TRUE)
-
-    return(centered)
+                                tpm=mat)
   }
 
-  cut_genes
+  if (complexity.cutoff != F & is.numeric(complexity.cutoff)) {
+	mat <- cacheCall::cacheCall(pipeName=pipeName,
+                                fnName='complexityCut',
+                                args=args,
+                                cachePath=cachePath,
+                                mat=mat,
+                                cutoff=complexity.cutoff)
+  }
+
+  if (genes.cutoff != F & is.numeric(genes.cutoff)) {
+    mat <- cacheCall::cacheCall(pipeName=pipeName,
+                                fnName='genesCut',
+                                args=args,
+                                cachePath=cachePath,
+                                mat=mat,
+                                cutoff=genes.cutoff)
+  }
+
+  if (isTRUE(centering)) {
+    mat <- cacheCall::cacheCall(pipeName=pipeName,
+                                fnName='center',
+                                args=args,
+                                cachePath=cachePath,
+                                mat=mat,
+                                cellcols=TRUE)
+  }
+
+  mat
 
 }
