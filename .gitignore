@@ -1,3 +1,5 @@
 .Rproj.user
 statistrics.R
 packrat/lib*/
+.Rhistory
+.Rprofile
