@@ -14,12 +14,14 @@
 #' If the step has been run before, the saved file will be read in in place of step/function execution, saving runtime.
 #' This is enabled by wrapping each function/step in the pipeline with a call to \code{cacheCall:cacheCall()}.
 #' See \code{?cacheCall::cacheCall} for more details.
+#' Note that setting \code{n.sig.1 = 0} and \code{n.sig.2 = 0} is equivalent to skipping \code{hcsig_cut}.
+#' Similarly, setting \code{jac.cut = 0} is equivalent to skipping \code{hcsim_cut}.
 #'
 #'
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param pipeName a job ID, a name for the project/pipeline. Defaults to function name.
 #' @param cachePath passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.
-#' @param sep passed to  \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".
+#' @param sep passed to \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".
 #' @param collapse passed to \code{cacheCall::cacheCall}. A character to separate arguments(+names) from one another. Defaults to "__".
 #' @param method.cor a character string of the distance metric for calculating correlations. Defaults to 'pearson'.
 #' @param method.hc a character string of the type of linkage used in the hierarchical clustering. Defaults to 'average'.
@@ -30,12 +32,12 @@
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
-#' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
 #' @param pval.adjust NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
+#' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
 #' @param reorder.by.sig if TRUE, the list of clusters is reordered by most to least significant.
-#' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.
-#' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.
-#' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out.
+#' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out. Also see Details.
+#' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.
+#' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.
 #' @param program.cutoff a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.
 #'
 #' @return a list of programs: coherent sets of genes expressed in the data. Every cluster remaining after filtering steps generates a corresponding program.
@@ -55,7 +57,7 @@ main <- function(mat,
                  fc.value=3,
                  fc.sort=TRUE,
                  p.value=10^(-4),
-                 pval.adjust=NULL,
+				 pval.adjust=NULL,
                  pval.sort=FALSE,
                  reorder.by.sig=TRUE,
                  n.sig.1=50,

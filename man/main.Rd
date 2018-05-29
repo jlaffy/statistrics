@@ -18,7 +18,7 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 
 \item{cachePath}{passed to \code{cacheCall::cacheCall}. A character string providing path to the Cache directory.}
 
-\item{sep}{passed to  \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".}
+\item{sep}{passed to \code{cacheCall::cacheCall}. A character to separate arguments and their names. Defaults to ":".}
 
 \item{collapse}{passed to \code{cacheCall::cacheCall}. A character to separate arguments(+names) from one another. Defaults to "__".}
 
@@ -46,11 +46,11 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 
 \item{reorder.by.sig}{if TRUE, the list of clusters is reordered by most to least significant.}
 
-\item{n.sig.1}{significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.}
+\item{n.sig.1}{significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out. Also see Details.}
 
-\item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.}
+\item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.}
 
-\item{jac.cut}{a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out.}
+\item{jac.cut}{a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.}
 
 \item{program.cutoff}{a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.}
 }
@@ -73,4 +73,6 @@ The output of each step in the pipeline is saved as a .rds file in \code{cachePa
 If the step has been run before, the saved file will be read in in place of step/function execution, saving runtime.
 This is enabled by wrapping each function/step in the pipeline with a call to \code{cacheCall:cacheCall()}.
 See \code{?cacheCall::cacheCall} for more details.
+Note that setting \code{n.sig.1 = 0} and \code{n.sig.2 = 0} is equivalent to skipping \code{hcsig_cut}.
+Similarly, setting \code{jac.cut = 0} is equivalent to skipping \code{hcsim_cut}.
 }
