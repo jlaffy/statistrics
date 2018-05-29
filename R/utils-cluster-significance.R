@@ -91,7 +91,7 @@ p_val <- function(a, b, p.value=NULL, adjust.method=NULL){
 #'
 sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method=NULL, ...){
 
-  fc <- fold_change(a, b, fc.value=fc.value, ...)
+  fc <- fold_change(a, b, fc.value=fc.value)
 
   if (length(fc) == 0) {return()}
 
@@ -197,7 +197,7 @@ hcsig <- function(k,
 										  mat=mat,
 										  fc.value=fc.value,
 										  p.value=p.value,
-										  pval.adjust=pval.adjust,
+										  adjust.method=pval.adjust,
 										  fc.sort=fc.sort,
 										  pval.sort=pval.sort),
 				  simplify=FALSE,
