@@ -183,11 +183,15 @@ most_significant <- function(List, by='small') {
 #' @export
 #'
 hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, pval.sort=F) {
-
-  sig.1 <- lapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort))
-#   sig.1 <- lapply(1:length(k), function(i) {
-# 					print(names(k)[i])
-# 					DEgenes(k=k[[i]], mat=mat, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort) })
+  
+  sig.1 <- sapply(k, function(kk) DEgenes(k=kk,
+										  mat=mat,
+										  fc.value=fc.value,
+										  p.value=p.value,
+										  fc.sort=fc.sort,
+										  pval.sort=pval.sort),
+				  simplify=FALSE,
+				  USE.NAMES=TRUE)
 
   sig.2 <- most_significant(sig.1)
 
