@@ -31,6 +31,8 @@ program <- function(List, cutoff=50) {
 					   Genes <- names(genes)[1:cutoff]
 					   Genes[!is.na(Genes)] })
 
+  names(Programs) <- paste("P", 1:length(Programs), sep="")
+
   cat(paste("\nTop", cutoff, "program genes:\n"))
   print(top_program_genes(Programs, cutoff=50))
 
@@ -43,32 +45,28 @@ program <- function(List, cutoff=50) {
 #'
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param programs either a single or a list of character vectors (genes). Each vector is a program.
-#' @param many boolean. If TRUE, <programs> arg is a list of vectors, each of which scores will be calculated for.
 #' @param center if TRUE, the resulting score matrix is centered.
 #'
 #' @return list (if many=F) or matrix (if many=T) of program scores
 #' @export
 #'
-score <- function(mat, programs, many=TRUE, center=TRUE) {
+score <- function(mat, programs, center=TRUE) {
 
-  .score <- function(mat, program) {
-    sapply(1:ncol(mat), function(cell) mean(mat[program,cell], na.rm=TRUE))
-  }
+  result <- sapply(programs, function(program) {colMeans(mat[program, ])},
+				   USE.NAMES=T,
+				   simplify=F)
 
-  if (isTRUE(many)) {
-    result <- lapply(programs, function(program) .score(mat=mat, program=program))
+  if (length(result) > 1) {
 	result <- do.call(cbind, result)
-	colnames(result) <- paste("P", 1:ncol(result), sep="")
+  }
+
+  if (is.null(rownames(result))) {
 	rownames(result) <- colnames(mat)
-	result
   }
 
-
-  else if (!isTRUE(many) | class(programs) == 'character') {
-    result <- .score(mat=mat, program=programs)
+  if (isTRUE(center)) {
+	result <- center(result)
   }
-
-  if (isTRUE(center)) result <- center(result)
 
   result
 
