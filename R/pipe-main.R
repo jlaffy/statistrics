@@ -31,6 +31,7 @@
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
+#' @param pval.adjust NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #' @param reorder.by.sig if TRUE, the list of clusters is reordered by most to least significant.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.
 #' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.
@@ -54,6 +55,7 @@ main <- function(mat,
                  fc.value=3,
                  fc.sort=TRUE,
                  p.value=10^(-4),
+                 pval.adjust=NULL,
                  pval.sort=FALSE,
                  reorder.by.sig=TRUE,
                  n.sig.1=50,
@@ -92,6 +94,7 @@ main <- function(mat,
 								   mat=mat,
 								   fc.value=fc.value,
 								   p.value=p.value,
+								   pval.adjust=pval.adjust,
 								   fc.sort=fc.sort,
                    pval.sort=pval.sort,
 								   reorder=reorder.by.sig)

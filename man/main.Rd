@@ -7,9 +7,9 @@
 main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
   method.cor = "pearson", method.hc = "average", dissim.dist = 1,
   size.cut = TRUE, min.size = 5, max.size = 0.5, fc.value = 3,
-  fc.sort = TRUE, p.value = 10^(-4), pval.sort = FALSE,
-  reorder.by.sig = TRUE, n.sig.1 = 50, n.sig.2 = 10, jac.cut = 0.75,
-  program.cutoff = 50)
+  fc.sort = TRUE, p.value = 10^(-4), pval.adjust = NULL,
+  pval.sort = FALSE, reorder.by.sig = TRUE, n.sig.1 = 50, n.sig.2 = 10,
+  jac.cut = 0.75, program.cutoff = 50)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}
@@ -39,6 +39,8 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 \item{fc.sort}{if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.}
 
 \item{p.value}{p-value above which differential gene expression is deemed insignificant.}
+
+\item{pval.adjust}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.}
 

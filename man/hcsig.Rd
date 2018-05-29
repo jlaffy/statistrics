@@ -4,8 +4,8 @@
 \alias{hcsig}
 \title{hcsig: hcluster Significance}
 \usage{
-hcsig(k, mat, fc.value = 3, p.value = 10^(-4), reorder = TRUE,
-  fc.sort = T, pval.sort = F)
+hcsig(k, mat, fc.value = 3, p.value = 10^(-4), pval.adjust = NULL,
+  reorder = TRUE, fc.sort = T, pval.sort = F)
 }
 \arguments{
 \item{k}{a list of character vectors; sets of cell members belonging to each cluster.}
@@ -15,6 +15,8 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), reorder = TRUE,
 \item{fc.value}{fold change value below which differential gene expression is deemed insignificant.}
 
 \item{p.value}{p-value above which differential gene expression is deemed insignificant.}
+
+\item{pval.adjust}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{reorder}{if TRUE, the list of clusters is reordered by most to least significant.}
 

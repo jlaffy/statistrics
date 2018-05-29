@@ -171,10 +171,12 @@ most_significant <- function(List, by='small') {
 #' hcsig: hcluster Significance
 #'
 #' hcluster Significance. For clusters derived from hierarchical clustering (with \code{hclust}), data is retrieved.
+#'
 #' @param k a list of character vectors; sets of cell members belonging to each cluster.
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
+#' @param pval.adjust NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #' @param reorder if TRUE, the list of clusters is reordered by most to least significant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.
@@ -182,12 +184,20 @@ most_significant <- function(List, by='small') {
 #' @return list of length 3. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 #' @export
 #'
-hcsig <- function(k, mat, fc.value=3, p.value=10^(-4), reorder=TRUE, fc.sort=T, pval.sort=F) {
-  
+hcsig <- function(k,
+                  mat,
+                  fc.value=3,
+                  p.value=10^(-4),
+                  pval.adjust=NULL,
+                  reorder=TRUE,
+                  fc.sort=T,
+                  pval.sort=F) {
+
   sig.1 <- sapply(k, function(kk) DEgenes(k=kk,
 										  mat=mat,
 										  fc.value=fc.value,
 										  p.value=p.value,
+										  pval.adjust=pval.adjust,
 										  fc.sort=fc.sort,
 										  pval.sort=pval.sort),
 				  simplify=FALSE,
