@@ -53,11 +53,12 @@ program <- function(List, cutoff=50) {
 score <- function(mat, programs, center=TRUE) {
 
   result <- sapply(programs, function(program) {colMeans(mat[program, ])},
-				   USE.NAMES=T,
+#				   USE.NAMES=T,
 				   simplify=F)
 
   if (length(result) > 1) {
 	result <- do.call(cbind, result)
+	colnames(result) <- paste("P", 1:ncol(result), sep="")
   }
 
   if (is.null(rownames(result))) {
@@ -65,7 +66,7 @@ score <- function(mat, programs, center=TRUE) {
   }
 
   if (isTRUE(center)) {
-	result <- center(result)
+	result <- center(result, cellcols=FALSE)
   }
 
   result
