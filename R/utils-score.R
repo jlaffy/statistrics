@@ -50,7 +50,7 @@ program <- function(List, cutoff=50) {
 #' @return list (if many=F) or matrix (if many=T) of program scores
 #' @export
 #'
-score <- function(mat, programs, center=TRUE) {
+score <- function(mat, programs, center=TRUE, center.colwise=FALSE) {
 
   result <- sapply(programs, function(program) {colMeans(mat[program, ])},
 #				   USE.NAMES=T,
@@ -58,6 +58,9 @@ score <- function(mat, programs, center=TRUE) {
 
   if (length(result) > 1) {
 	result <- do.call(cbind, result)
+  }
+
+  if (is.null(colnames(result))) {
 	colnames(result) <- paste("P", 1:ncol(result), sep="")
   }
 
@@ -66,7 +69,7 @@ score <- function(mat, programs, center=TRUE) {
   }
 
   if (isTRUE(center)) {
-	result <- center(result, cellcols=FALSE)
+	result <- center(result, colwise = center.colwise)
   }
 
   result
