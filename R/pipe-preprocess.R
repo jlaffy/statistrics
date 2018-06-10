@@ -64,7 +64,7 @@ preprocess <- function(mat,
                                 args=args,
                                 cachePath=cachePath,
                                 mat=mat,
-                                colwise=TRUE)
+                                rowWise=TRUE)
   }
 
   mat
