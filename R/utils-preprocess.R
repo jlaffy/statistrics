@@ -137,14 +137,14 @@ genesCut <- function(mat, cutoff=4) {
 #' @return a matric with centered gene expression data.
 #' @export
 #'
-center <- function(mat, colwise = TRUE) {
+center <- function(mat, rowWise = TRUE) {
 
-  if (isTRUE(colwise)) {
-    mat.centered <- scale(mat, center = TRUE, scale = FALSE)
+  if (isTRUE(rowWise)) {
+    mat.centered <- t(scale(t(mat), center = TRUE, scale = FALSE))
   }
 
-  if (!isTRUE(colwise)) {
-    mat.centered <- t(scale(t(mat), center = TRUE, scale = FALSE))
+  else if (!isTRUE(rowWise)) {
+    mat.centered <- scale(mat, center = TRUE, scale = FALSE)
   }
 
   mat.centered
