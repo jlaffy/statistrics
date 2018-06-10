@@ -1,3 +1,20 @@
+try_apply <- function(List, cachePath=".", FUN="main", args=NULL, pipeName=NULL, ...) {
+
+  if (is.null(pipeName)) {
+    pipeName <- FUN
+  }
+
+  if (is.null(names(List))) {
+    names(List) <- paste("M", 1:length(List), sep="")
+  }
+
+  sapply(1:length(List), function(i) {
+    pipeName <- paste(names(List)[i], pipeName, sep="-")
+    try(do.call(FUN, list(List[[i]], pipeName=pipeName, cachePath=cachePath, ...)))}, simplify=FALSE)
+
+}
+
+
 #' Cell Clustering and Cluster Processing
 #'
 #' A pipeline for cluster analysis of single cell RNA sequencing data.
@@ -39,6 +56,7 @@
 #' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.
 #' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.
 #' @param program.cutoff a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.
+#' @param score.center if TRUE, the score matrix is centered with call to \code{statistrics::center}.
 #'
 #' @return a list of programs: coherent sets of genes expressed in the data. Every cluster remaining after filtering steps generates a corresponding program.
 #' @export
@@ -57,7 +75,7 @@ main <- function(mat,
                  fc.value=3,
                  fc.sort=TRUE,
                  p.value=10^(-4),
-				 pval.adjust=NULL,
+		             pval.adjust=NULL,
                  pval.sort=FALSE,
                  reorder.by.sig=TRUE,
                  n.sig.1=50,
@@ -65,15 +83,40 @@ main <- function(mat,
                  jac.cut=0.75,
                  program.cutoff=50) {
 
-  if (is.null(mat)) stop("'Mat' must be provided.")
-
   args <- as.list(environment())[-c(1:5)]
+
+  if (is.null(mat)) stop("<mat> must be assigned a matrix or a list of matrices.")
+
+  if (is.list(mat)) {
+    Programs <- try_apply(List=mat,
+                          pipeName=pipeName,
+              		        args=args,
+              		        cachePath=cachePath,
+              		        sep=sep,
+              		        collapse=collapse,
+              		        method.cor=method.cor,
+              		        method.hc=method.hc,
+              		        dissim.dist=dissim.dist,
+              		        size.cut=size.cut,
+              		        min.size=min.size,
+              		        max.size=max.size,
+              		        fc.value=fc.value,
+              		        fc.sort=fc.sort,
+              		        p.value=p.value,
+              		        pval.adjust=pval.adjust,
+              		        pval.sort=pval.sort,
+              		        reorder.by.sig=reorder.by.sig,
+              		        n.sig.1=n.sig.1,
+              		        n.sig.2=n.sig.2,
+              		        jac.cut=jac.cut,
+              		        program.cutoff=program.cutoff)
+  }
 
   hc <- cacheCall::cacheCall(pipeName=pipeName,
 							 fnName='hcluster',
 							 args=args,
 							 cachePath=cachePath,
-               mat=mat,
+               				 mat=mat,
 							 method.cor=method.cor,
 							 method.hc=method.hc,
 							 dissim.dist=dissim.dist)
@@ -82,7 +125,7 @@ main <- function(mat,
 							fnName='hcutree',
 							args=args,
 							cachePath=cachePath,
-              hc=hc,
+              				hc=hc,
 							h=hc$height,
 							clean=size.cut,
 							min=min.size,
@@ -92,20 +135,20 @@ main <- function(mat,
 								   fnName='hcsig',
 								   args=args,
 								   cachePath=cachePath,
-                   k=k,
+                   				   k=k,
 								   mat=mat,
 								   fc.value=fc.value,
 								   p.value=p.value,
 								   pval.adjust=pval.adjust,
 								   fc.sort=fc.sort,
-                   pval.sort=pval.sort,
+                   				   pval.sort=pval.sort,
 								   reorder=reorder.by.sig)
 
   hcsigCut <- cacheCall::cacheCall(pipeName=pipeName,
 								   fnName='hcsig_cut',
 								   args=args,
 								   cachePath=cachePath,
-                   obj=hcsigObj,
+                   				   obj=hcsigObj,
 								   n.sig.1=n.sig.1,
 								   n.sig.2=n.sig.2)
 
@@ -113,24 +156,16 @@ main <- function(mat,
 								   fnName='hcsim_cut',
 								   args=args,
 								   cachePath=cachePath,
-                   obj=hcsigCut,
+                   				   obj=hcsigCut,
 								   jac.cut=jac.cut)
 
   Programs <- cacheCall::cacheCall(pipeName=pipeName,
 								   fnName='program',
 								   args=args,
 								   cachePath=cachePath,
-                   List=hcsimCut$sig.1,
+                   				   List=hcsimCut$sig.1,
 								   cutoff=program.cutoff)
 
-  Scores <- cacheCall::cacheCall(pipeName=pipeName,
-								 fnName='score',
-								 args=args,
-								 cachePath=cachePath,
-								 mat=mat,
-								 programs=Programs,
-								 many=TRUE,
-								 center=FALSE)
-
-  list(Programs=Programs, Scores=Scores)
+  Programs
 }
+
