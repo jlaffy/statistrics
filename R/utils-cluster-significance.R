@@ -248,9 +248,18 @@ hcsig_cut <- function(obj, n.sig.1=50, n.sig.2=10, by='either'){
   sig.1.bool <- lengths(obj$sig.1) >= n.sig.1
   sig.2.bool <- lengths(obj$sig.2) >= n.sig.2
 
-  if (by=='either') {
+  if (by == 'sig.1') {
+    cutter <- sig.1.bool
+  }
+
+  else if (by == 'sig.2') {
+    cutter <- sig.2.bool
+  }
+
+  else if (by=='either') {
     cutter <- sig.1.bool | sig.2.bool
   }
+
   else if (by=='both') {
     cutter <- sig.1.bool & sig.2.bool
   }
