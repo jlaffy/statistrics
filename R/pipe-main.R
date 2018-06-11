@@ -54,6 +54,7 @@ try_apply <- function(List, cachePath=".", FUN="main", args=NULL, pipeName=NULL,
 #' @param reorder.by.sig if TRUE, the list of clusters is reordered by most to least significant.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out. Also see Details.
 #' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.
+#' @param sig.cut.by ADD DESCRIPTION
 #' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.
 #' @param program.cutoff a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.
 #' @param score.center if TRUE, the score matrix is centered with call to \code{statistrics::center}.
@@ -80,6 +81,7 @@ main <- function(mat,
                  reorder.by.sig=TRUE,
                  n.sig.1=50,
                  n.sig.2=10,
+                 sig.cut.by='sig.1',
                  jac.cut=0.75,
                  program.cutoff=50) {
 
@@ -150,7 +152,8 @@ main <- function(mat,
 					    cachePath=cachePath,
                    			    obj=hcsigObj,
 					    n.sig.1=n.sig.1,
-					    n.sig.2=n.sig.2)
+					    n.sig.2=n.sig.2,
+                                            by=sig.cut.by)
 
   hcsimCut <- cacheCall::cacheCall(pipeName=pipeName,
 					    fnName='hcsim_cut',
