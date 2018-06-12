@@ -54,7 +54,7 @@ try_apply <- function(List, cachePath=".", FUN="main", args=NULL, pipeName=NULL,
 #' @param reorder.by.sig if TRUE, the list of clusters is reordered by most to least significant.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out. Also see Details.
 #' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.
-#' @param sig.cut.by ADD DESCRIPTION
+#' @param sig.cut.by Cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'. Passed to \code{hcsig_cut}.
 #' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.
 #' @param program.cutoff a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.
 #' @param score.center if TRUE, the score matrix is centered with call to \code{statistrics::center}.

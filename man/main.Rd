@@ -9,7 +9,7 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
   size.cut = TRUE, min.size = 5, max.size = 0.5, fc.value = 3,
   fc.sort = TRUE, p.value = 10^(-4), pval.adjust = NULL,
   pval.sort = FALSE, reorder.by.sig = TRUE, n.sig.1 = 50, n.sig.2 = 10,
-  jac.cut = 0.75, program.cutoff = 50)
+  sig.cut.by = "sig.1", jac.cut = 0.75, program.cutoff = 50)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}
@@ -50,9 +50,13 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 
 \item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.}
 
+\item{sig.cut.by}{Cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'. Passed to \code{hcsig_cut}.}
+
 \item{jac.cut}{a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.}
 
 \item{program.cutoff}{a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.}
+
+\item{score.center}{if TRUE, the score matrix is centered with call to \code{statistrics::center}.}
 }
 \value{
 a list of programs: coherent sets of genes expressed in the data. Every cluster remaining after filtering steps generates a corresponding program.

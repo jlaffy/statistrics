@@ -13,7 +13,7 @@ hcsig_cut(obj, n.sig.1 = 50, n.sig.2 = 10, by = "either")
 
 \item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.}
 
-\item{by}{if 'either': clusters may pass the significance test by n.sig.1 OR n.sig.2. If 'both': clusters must pass the significance test by n.sig.1 and n.sig.2.}
+\item{by}{cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'.}
 }
 \value{
 an hcsig object (the same structure and data types as the input) filtered to include only significant clusters.

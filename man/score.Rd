@@ -4,14 +4,12 @@
 \alias{score}
 \title{Program Scores}
 \usage{
-score(mat, programs, many = TRUE, center = TRUE)
+score(mat, programs, center = TRUE, center.rowWise = FALSE)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}
 
 \item{programs}{either a single or a list of character vectors (genes). Each vector is a program.}
-
-\item{many}{boolean. If TRUE, <programs> arg is a list of vectors, each of which scores will be calculated for.}
 
 \item{center}{if TRUE, the resulting score matrix is centered.}
 }
