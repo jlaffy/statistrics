@@ -81,7 +81,7 @@ main <- function(mat,
                  reorder.by.sig=TRUE,
                  n.sig.1=50,
                  n.sig.2=10,
-                 sig.cut.by='sig.1',
+                 sig.cut.by='both',
                  jac.cut=0.75,
                  program.cutoff=50) {
 
