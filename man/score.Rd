@@ -4,7 +4,7 @@
 \alias{score}
 \title{Program Scores}
 \usage{
-score(mat, programs, center = TRUE, center.rowWise = FALSE)
+score(mat, programs, center = TRUE, center.rowWise = TRUE)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}

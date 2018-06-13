@@ -3,3 +3,4 @@ statistrics.R
 packrat/lib*/
 .Rhistory
 .Rprofile
+.DS_Store

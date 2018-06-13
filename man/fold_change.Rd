@@ -4,7 +4,7 @@
 \alias{fold_change}
 \title{Fold Changes between Matrices}
 \usage{
-fold_change(a, b, log = TRUE, log.base = 2, fc.value = 3)
+fold_change(a, b, log = TRUE, log.base = 2, fc.value = 3, greater = T)
 }
 \arguments{
 \item{a}{matrix (vars. by. obs.) for which fold changes are calculated}
@@ -16,6 +16,8 @@ fold_change(a, b, log = TRUE, log.base = 2, fc.value = 3)
 \item{log.base}{base of log. Defaults to 2.}
 
 \item{fc.value}{NULL or numeric. If NULL, return all FC values. If numeric, return FC values >= fc.value.}
+
+\item{greater}{boolean. If TRUE, return FC values equal to or greater than cutoff, else smaller than or equal to.}
 }
 \value{
 numeric vector containing FC values

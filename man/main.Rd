@@ -9,7 +9,7 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
   size.cut = TRUE, min.size = 5, max.size = 0.5, fc.value = 3,
   fc.sort = TRUE, p.value = 10^(-4), pval.adjust = NULL,
   pval.sort = FALSE, reorder.by.sig = TRUE, n.sig.1 = 50, n.sig.2 = 10,
-  sig.cut.by = "sig.1", jac.cut = 0.75, program.cutoff = 50)
+  sig.cut.by = "both", jac.cut = 0.75, program.cutoff = 50)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}

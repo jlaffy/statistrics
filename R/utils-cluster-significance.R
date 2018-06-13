@@ -16,11 +16,12 @@ gene_means <- function(mat, by=1) { apply(mat, by, mean) }
 #' @param log logical. if TRUE, calculates fold change in log space.
 #' @param log.base base of log. Defaults to 2.
 #' @param fc.value NULL or numeric. If NULL, return all FC values. If numeric, return FC values >= fc.value.
+#' @param greater boolean. If TRUE, return FC values equal to or greater than cutoff, else smaller than or equal to.
 #'
 #' @return numeric vector containing FC values
 #' @export
 #'
-fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3) {
+fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3, greater=T) {
 
   a <- as.matrix(a)
   b <- as.matrix(b)
@@ -35,9 +36,15 @@ fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3) {
 
   else FC <- a/b
 
-  if (is.null(fc.value)) return(FC)
+  if (!is.null(fc.value) & !isTRUE(greater)) {
+	return(FC[FC <= fc.value])
+  }
 
-  else if (!is.null(fc.value)) return(FC[FC > fc.value])
+  else if (!is.null(fc.value)) {
+	return(FC[FC >= fc.value])
+  }
+
+  FC
 
 }
 
