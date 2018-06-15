@@ -70,7 +70,6 @@ try_apply <- function(List, cachePath=".", FUN="main", args=NULL, pipeName=NULL,
 #' @param sig.cut.by Cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'. Passed to \code{hcsig_cut}.
 #' @param jac.cut a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.
 #' @param program.cutoff a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.
-#' @param score.center if TRUE, the score matrix is centered with call to \code{statistrics::center}.
 #'
 #' @return a list of programs: coherent sets of genes expressed in the data. Every cluster remaining after filtering steps generates a corresponding program.
 #' @export
@@ -97,8 +96,7 @@ main <- function(mat,
                  n.sig.2=10,
                  sig.cut.by='both',
                  jac.cut=0.75,
-                 program.cutoff=50,
-		             score.center=score.center) {
+                 program.cutoff=50) {
 
   args <- as.list(environment())[-c(1:5)]
 
@@ -128,7 +126,6 @@ main <- function(mat,
                           n.sig.2=n.sig.2,
                           jac.cut=jac.cut,
                           program.cutoff=program.cutoff)
-    return(print('Finished'))
   }
 
   hc <- cacheCall::cacheCall(pipeName=pipeName,
