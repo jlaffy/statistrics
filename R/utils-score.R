@@ -46,6 +46,7 @@ program <- function(List, cutoff=50) {
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param programs either a single or a list of character vectors (genes). Each vector is a program.
 #' @param center if TRUE, the resulting score matrix is centered.
+#' @param center.rowWise if TRUE, centering will be performed row-wise. Else, centering by column.
 #'
 #' @return list (if many=F) or matrix (if many=T) of program scores
 #' @export

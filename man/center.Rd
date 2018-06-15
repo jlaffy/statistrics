@@ -9,10 +9,10 @@ center(mat, rowWise = TRUE)
 \arguments{
 \item{mat}{a matrix of cells-by-genes or genes-by-cells containing gene expression data.}
 
-\item{cellcols}{boolean. The columns (variables) are cells if TRUE or are genes if FALSE.}
+\item{rowWise}{boolean. Center by rows if TRUE and by columns if FALSE.}
 }
 \value{
-a matric with centered gene expression data.
+a matrix with centered gene expression data.
 }
 \description{
 Center gene expression data (before computing correlations), such that the average correlation between cells will be 0.

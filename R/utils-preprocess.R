@@ -132,9 +132,9 @@ genesCut <- function(mat, cutoff=4) {
 #' mat is a matrix with cell rows and gene columns.
 #'
 #' @param mat a matrix of cells-by-genes or genes-by-cells containing gene expression data.
-#' @param cellcols boolean. The columns (variables) are cells if TRUE or are genes if FALSE.
+#' @param rowWise boolean. Center by rows if TRUE and by columns if FALSE.
 #'
-#' @return a matric with centered gene expression data.
+#' @return a matrix with centered gene expression data.
 #' @export
 #'
 center <- function(mat, rowWise = TRUE) {

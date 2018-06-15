@@ -7,9 +7,10 @@
 main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
   method.cor = "pearson", method.hc = "average", dissim.dist = 1,
   size.cut = TRUE, min.size = 5, max.size = 0.5, fc.value = 3,
-  fc.sort = TRUE, p.value = 10^(-4), pval.adjust = NULL,
-  pval.sort = FALSE, reorder.by.sig = TRUE, n.sig.1 = 50, n.sig.2 = 10,
-  sig.cut.by = "both", jac.cut = 0.75, program.cutoff = 50)
+  fc.sort = TRUE, p.value = 10^(-4), p.value.2 = 10^(-5),
+  pval.adjust = NULL, pval.sort = FALSE, reorder.by.sig = TRUE,
+  n.sig.1 = 50, n.sig.2 = 10, sig.cut.by = "both", jac.cut = 0.75,
+  program.cutoff = 50, score.center = score.center)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}
@@ -40,6 +41,8 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 
 \item{p.value}{p-value above which differential gene expression is deemed insignificant.}
 
+\item{p.value.2}{p-value above which differential gene expression is deemed insignificant with higher cutoff (sig.2)}
+
 \item{pval.adjust}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.}
@@ -48,7 +51,7 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 
 \item{n.sig.1}{significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out. Also see Details.}
 
-\item{n.sig.2}{significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.}
+\item{n.sig.2}{significance cutoff for the number of more significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out. Also see Details.}
 
 \item{sig.cut.by}{Cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'. Passed to \code{hcsig_cut}.}
 

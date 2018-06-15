@@ -71,3 +71,18 @@ makeFilename <- function(args, pipeName=NULL, fnName=NULL, cachePath=".", sep=":
   print(paste(cachePath, String, ".rds", sep=""))
   paste(cachePath, String, ".rds", sep="")
 }
+
+
+#' Combine data from files
+#'
+#' @param path a character vector of full path names; the default corresponds to the working directory, \code{getwd()}.
+#' @param pattern an optional regular expression. Only file names which match the regular expression will be returned.
+#'
+#' @return Combined files' input - each file's contents contained in one list.
+#' @export
+#'
+combine <- function(path, pattern) {
+  f <- list.files(path = path, pattern = pattern, full.names = T)
+  out <- sapply(f, function(ff) readRDS(ff), USE.NAMES = F, simplify = FALSE)
+  unlist(out, recursive = FALSE)
+}

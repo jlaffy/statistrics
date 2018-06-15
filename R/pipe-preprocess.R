@@ -24,7 +24,7 @@ preprocess <- function(mat,
                        logTransform=TRUE,
                        complexity.cutoff=3000,
                        genes.cutoff=4,
-		       centering=TRUE) {
+		                   centering=TRUE) {
 
   if (is.null(mat)) stop("'Mat' must be provided.")
 

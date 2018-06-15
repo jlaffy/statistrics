@@ -135,6 +135,9 @@ DEgenes <- function(k, mat, fc.value=3, p.value=10^(-4), fc.sort=T, pval.sort=F,
   out
 }
 
+higher_cutoff <- function(List, cutoff = 10^(-5)) {
+  sapply(List, function(L) L[L <= cutoff], USE.NAMES=T, simplify=F)
+}
 
 # ==============================================================
 # Cluster significance helpers
@@ -167,7 +170,12 @@ most_significant <- function(List, by='small') {
   return.df <- ordered.df[!duplicated(ordered.df$name), ]
   return.df.2 <- return.df[order(return.df$id), ]
 
-  df_to_list(return.df.2, col=return.df.2$id)
+  # add back vectors that were in List but are not in List.out since they had zero genes.
+  List.out <- df_to_list(return.df.2, col=return.df.2$id)
+  List.zeros <- List[!names(List) %in% names(List.out)]
+  List.out <- c(List.out, List.zeros)[names(List)]
+
+  List.out
 }
 
 
@@ -183,51 +191,44 @@ most_significant <- function(List, by='small') {
 #' @param mat a matrix of gene expression data (cells by genes)
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
+#' @param p.value.2 p-value above which differential gene expression is deemed insignificant with higher cutoff (sig.2)
 #' @param pval.adjust NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #' @param reorder if TRUE, the list of clusters is reordered by most to least significant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.
 #'
-#' @return list of length 3. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
+#' @return list of length 4. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that only genes with p value higher than p.value.2 are included. list$sig.3, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 #' @export
 #'
 hcsig <- function(k,
                   mat,
                   fc.value=3,
                   p.value=10^(-4),
+                  p.value.2=10^(-5),
                   pval.adjust=NULL,
                   reorder=TRUE,
                   fc.sort=T,
                   pval.sort=F) {
 
-  sig.1 <- sapply(k, function(kk) DEgenes(k=kk,
-										  mat=mat,
-										  fc.value=fc.value,
-										  p.value=p.value,
-										  adjust.method=pval.adjust,
-										  fc.sort=fc.sort,
-										  pval.sort=pval.sort),
-				  simplify=FALSE,
-				  USE.NAMES=TRUE)
+  sig.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
+                                          adjust.method=pval.adjust, fc.sort=fc.sort, pval.sort=pval.sort),
+                  simplify=FALSE,
+				          USE.NAMES=TRUE)
 
-  sig.2 <- most_significant(sig.1)
-
-  sig.1.zeros <- sig.1[!names(sig.1) %in% names(sig.2)]
-
-  sig.2 <- c(sig.2, sig.1.zeros)[names(sig.1)]
+  sig.2 <- higher_cutoff(sig.1, cutoff = p.value.2)
+  sig.3 <- most_significant(sig.1)
 
     if (isTRUE(reorder)) {
-
-	  ord <- cluster_reorder(sig.1, sig.2)
+      ord <- cluster_reorder(sig.1, sig.2, sig.3)
       k <- k[ord]
       sig.1 <- sig.1[ord]
       sig.2 <- sig.2[ord]
+      sig.3 <- sig.3[ord]
+    }
 
-  }
+  List <- list(k=k, sig.1=sig.1, sig.2=sig.2, sig.3=sig.3)
 
-  List <- list(k=k, sig.1=sig.1, sig.2=sig.2)
-
-  names(List) <- c("k", "sig.1", "sig.2")
+  names(List) <- c("k", "sig.1", "sig.2", "sig.3")
 
   List
 
@@ -242,13 +243,13 @@ hcsig <- function(k,
 #'
 #' @param obj hcsig object. Please refer to \code{statistrics::hcsig}.
 #' @param n.sig.1 significance cutoff for the number of significantly differentially expressed genes per cluster. Defaults to 50. Any clusters that do not pass this cutoff OR/AND that of n.sig.2 are filtered out.
-#' @param n.sig.2 significance cutoff for the number of most significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.
+#' @param n.sig.2 significance cutoff for the number of more significantly differentially expressed genes per cluster. Defaults to 10. Any clusters that do not pass this cutoff OR/AND that of n.sig.1 are filtered out.
 #' @param by cut based on scores for: 'sig.1', 'sig.2', 'either' or 'both'.
 #'
 #' @return an hcsig object (the same structure and data types as the input) filtered to include only significant clusters.
 #' @export
 #'
-hcsig_cut <- function(obj, n.sig.1=50, n.sig.2=10, by='either'){
+hcsig_cut <- function(obj, n.sig.1=50, n.sig.2=10, by='both'){
 
   obj <- input_check(obj)
 

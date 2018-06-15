@@ -4,8 +4,8 @@
 \alias{hcsig}
 \title{hcsig: hcluster Significance}
 \usage{
-hcsig(k, mat, fc.value = 3, p.value = 10^(-4), pval.adjust = NULL,
-  reorder = TRUE, fc.sort = T, pval.sort = F)
+hcsig(k, mat, fc.value = 3, p.value = 10^(-4), p.value.2 = 10^(-5),
+  pval.adjust = NULL, reorder = TRUE, fc.sort = T, pval.sort = F)
 }
 \arguments{
 \item{k}{a list of character vectors; sets of cell members belonging to each cluster.}
@@ -16,6 +16,8 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), pval.adjust = NULL,
 
 \item{p.value}{p-value above which differential gene expression is deemed insignificant.}
 
+\item{p.value.2}{p-value above which differential gene expression is deemed insignificant with higher cutoff (sig.2)}
+
 \item{pval.adjust}{NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.}
 
 \item{reorder}{if TRUE, the list of clusters is reordered by most to least significant.}
@@ -25,7 +27,7 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), pval.adjust = NULL,
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.}
 }
 \value{
-list of length 3. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
+list of length 4. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that only genes with p value higher than p.value.2 are included. list$sig.3, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 }
 \description{
 hcluster Significance. For clusters derived from hierarchical clustering (with \code{hclust}), data is retrieved.
