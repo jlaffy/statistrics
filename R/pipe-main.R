@@ -101,7 +101,6 @@ main <- function(mat,
 		             score.center=score.center) {
 
   args <- as.list(environment())[-c(1:5)]
-  args <- args[-length(args)]
 
   if (is.null(mat)) stop("<mat> must be assigned a matrix or a list of matrices.")
 
@@ -188,15 +187,6 @@ main <- function(mat,
               List=hcsimCut$sig.1,
 					    cutoff=program.cutoff)
 
-  Scores <- cacheCall::cacheCall(pipeName=pipeName,
-                                 fnName='score',
-                                 args=args,
-                                 cachePath=cachePath,
-                                 mat=mat,
-                                 programs=Programs,
-                                 center=score.center,
-                                 rowWise=T)
-
-  Scores
+  Programs
 }
 
