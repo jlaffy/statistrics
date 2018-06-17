@@ -81,8 +81,11 @@ makeFilename <- function(args, pipeName=NULL, fnName=NULL, cachePath=".", sep=":
 #' @return Combined files' input - each file's contents contained in one list.
 #' @export
 #'
-combine <- function(path, pattern) {
+combine <- function(path, pattern, Unlist = TRUE) {
   f <- list.files(path = path, pattern = pattern, full.names = T)
   out <- sapply(f, function(ff) readRDS(ff), USE.NAMES = F, simplify = FALSE)
-  unlist(out, recursive = FALSE)
+  if (!isTRUE(Unlist)) return(out)
+  else {
+    unlist(out, recursive = FALSE)
+  }
 }

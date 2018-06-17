@@ -144,7 +144,7 @@ hcorr <- function(mat,
 
   # Factor cells by hierarchical clustering
   if (isTRUE(order)) {
-    ord <- as.factor(hcorder(mat))
+    ord <- hcorder(mat)
     corr <- corr[ord, ord]
   }
 

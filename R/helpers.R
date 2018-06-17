@@ -1,5 +1,5 @@
-cluster_reorder <- function(param1, param2, decreasing=TRUE) {
-  order(lengths(param1), lengths(param2), decreasing=decreasing)
+cluster_reorder <- function(param1, param2, param3, decreasing=TRUE) {
+  order(lengths(param1), lengths(param2), lengths(param3), decreasing=decreasing)
 }
 
 
