@@ -137,9 +137,19 @@ genesCut <- function(mat, cutoff=4) {
 #' @return a matrix with centered gene expression data.
 #' @export
 #'
-center <- function(mat, rowWise = TRUE) {
+center <- function(mat, rowWise = TRUE, center.by = 'mean') {
 
-  if (isTRUE(rowWise)) {
+  if (center.by %in% c('med', 'median') & isTRUE(rowWise)) {
+    medians <- robustbase::rowMedians(mat)
+    mat.centered <- t(t(mat) - medians)
+  }
+
+  else if (center.by %in% c('med', 'median') & !isTRUE(rowWise)) {
+    medians <- robustbase::colMedians(mat)
+    mat.centered <- mat - medians
+  }
+
+  else if (isTRUE(rowWise)) {
     mat.centered <- t(scale(t(mat), center = TRUE, scale = FALSE))
   }
 
