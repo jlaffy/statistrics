@@ -108,8 +108,13 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
     b <- b[names(fc), , drop=F]
 
     pval <- p_val(a, b, p.value=p.value, adjust.method=adjust.method, ...)
+    fc <- fc[names(pval)]
 
-    if (isTRUE(pval.sort)) pval <- sort(pval, decreasing=F)
+    if (isTRUE(pval.sort)) {
+      pval.ord <- order(pval, decreasing=F)
+      pval <- pval[pval.ord]
+      fc <- fc[pval.ord]
+    }
 
     list(fc = fc, pval = pval)
   }
@@ -220,7 +225,7 @@ hcsig <- function(k,
                   pval.sort=F,
                   returning='all') {
 
-  SIG.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
+  sig.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
                                           adjust.method=pval.adjust, fc.sort=fc.sort, pval.sort=pval.sort, returning=returning),
                   simplify=FALSE,
                   USE.NAMES=TRUE)
