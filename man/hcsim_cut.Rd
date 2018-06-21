@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils-cluster-similarity.R
 \name{hcsim_cut}
 \alias{hcsim_cut}
-\title{Title}
+\title{Cut filters based on jaccard similarity}
 \usage{
 hcsim_cut(obj, jac.out = NULL, jac.cut = 0.75)
 }
@@ -17,5 +17,5 @@ hcsim_cut(obj, jac.out = NULL, jac.cut = 0.75)
 an hcsig object (the same structure and data types as the input) filtered to include only non-similar clusters according to \code{jac.cut} val.
 }
 \description{
-Title
+Cut filters based on jaccard similarity
 }

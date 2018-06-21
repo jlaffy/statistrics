@@ -4,7 +4,7 @@
 \alias{center}
 \title{Centering}
 \usage{
-center(mat, rowWise = TRUE)
+center(mat, rowWise = TRUE, center.by = "mean")
 }
 \arguments{
 \item{mat}{a matrix of cells-by-genes or genes-by-cells containing gene expression data.}

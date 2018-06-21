@@ -10,7 +10,7 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
   fc.sort = TRUE, p.value = 10^(-4), p.value.2 = 10^(-5),
   pval.adjust = NULL, pval.sort = FALSE, reorder.by.sig = TRUE,
   n.sig.1 = 50, n.sig.2 = 10, sig.cut.by = "both", jac.cut = 0.75,
-  program.cutoff = 50, score.center = score.center)
+  program.cutoff = 50)
 }
 \arguments{
 \item{mat}{a matrix of gene expression data (cells by genes)}
@@ -58,8 +58,6 @@ main(mat, pipeName = "main", cachePath = ".", sep = ":", collapse = "_",
 \item{jac.cut}{a numeric value indicating the cutoff for jaccard similarity. Of two clusters that are above this cutoff, the one with lower significance will be filtered out. Also see Details.}
 
 \item{program.cutoff}{a numeric value indicating the cutoff for program sizes. Defaults to 50, such that the maximum number of genes that a program can have is 50.}
-
-\item{score.center}{if TRUE, the score matrix is centered with call to \code{statistrics::center}.}
 }
 \value{
 a list of programs: coherent sets of genes expressed in the data. Every cluster remaining after filtering steps generates a corresponding program.

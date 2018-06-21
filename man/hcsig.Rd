@@ -5,7 +5,8 @@
 \title{hcsig: hcluster Significance}
 \usage{
 hcsig(k, mat, fc.value = 3, p.value = 10^(-4), p.value.2 = 10^(-5),
-  pval.adjust = NULL, reorder = TRUE, fc.sort = T, pval.sort = F)
+  pval.adjust = NULL, reorder = TRUE, fc.sort = T, pval.sort = F,
+  returning = "all")
 }
 \arguments{
 \item{k}{a list of character vectors; sets of cell members belonging to each cluster.}
@@ -25,6 +26,8 @@ hcsig(k, mat, fc.value = 3, p.value = 10^(-4), p.value.2 = 10^(-5),
 \item{fc.sort}{if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.}
 
 \item{pval.sort}{if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.}
+
+\item{returning}{return one of p-values, fold changes, or both from call of \code{DEgenes()} to \code{sig()}.}
 }
 \value{
 list of length 4. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that only genes with p value higher than p.value.2 are included. list$sig.3, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.

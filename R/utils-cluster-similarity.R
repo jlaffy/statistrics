@@ -100,7 +100,7 @@ jaccard_filter <- function(x, out=NULL, jac.cut=0.75) {
 # CLUSTER SIMILARITY CUT
 # ==============================================================
 
-#' Title
+#' Cut filters based on jaccard similarity
 #'
 #' @param obj hcsig object. Please refer to the documentation for \code{statistrics::hcsig}.
 #' @param jac.out the output vector. Usually and by default equal to NULL -- the clusters that pass jaccard similarity will be added to an empty vector.
@@ -115,7 +115,7 @@ hcsim_cut <- function(obj, jac.out=NULL, jac.cut=0.75) {
   k.cut <- jaccard_filter(x=obj$k, out=jac.out, jac.cut=jac.cut)
   kept <- obj$k %in% k.cut
 
-  list(k=k.cut,  sig.1=obj$sig.1[kept], sig.2=obj$sig.2[kept])
+  list(k=k.cut,  sig.1=obj$sig.1[kept], sig.2=obj$sig.2[kept], sig.3=obj$sig.3[kept], fc=obj$fc[kept])
 }
 
 # ==============================================================

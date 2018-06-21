@@ -4,7 +4,7 @@
 \alias{combine}
 \title{Combine data from files}
 \usage{
-combine(path, pattern)
+combine(path, pattern, Unlist = TRUE)
 }
 \arguments{
 \item{path}{a character vector of full path names; the default corresponds to the working directory, \code{getwd()}.}

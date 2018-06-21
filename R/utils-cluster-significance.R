@@ -108,8 +108,11 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
     b <- b[names(fc), , drop=F]
 
     pval <- p_val(a, b, p.value=p.value, adjust.method=adjust.method, ...)
+
     if (isTRUE(pval.sort)) pval <- sort(pval, decreasing=F)
-    pval}
+
+    list(fc = fc, pval = pval)
+  }
 
 }
 
@@ -124,14 +127,19 @@ sig <- function(a, b, p.value, fc.value=3, fc.sort=F, pval.sort=F, adjust.method
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
 #' @param adjust.method NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
+#' @param returning return one of p-values, fold changes, or both from the output of \code{sig()} call.
 #'
 #' @return numeric vector of p-values named with gene names.
 #' @export
 #'
-DEgenes <- function(k, mat, fc.value=3, p.value=10^(-4), fc.sort=T, pval.sort=F, adjust.method=NULL, ...) {
+DEgenes <- function(k, mat, fc.value=3, p.value=10^(-4), fc.sort=T, pval.sort=F, adjust.method=NULL, returning = 'pval', ...) {
   a <- mat[, k, drop=F]
   b <- mat[, !colnames(mat) %in% k, drop=F]
   out <- sig(a, b, fc.value=fc.value, p.value=p.value, fc.sort=fc.sort, pval.sort=pval.sort, adjust.method=adjust.method, ...)
+
+  if (returning %in% c('pval', 'p', 'pvalue')) return(out$pval)
+  else if (returning %in% c('fc', 'FC', 'foldchange', 'fold.change')) return(out$fc)
+  else if (returning %in% c('both', 'all')) return(out)
   out
 }
 
@@ -196,6 +204,7 @@ most_significant <- function(List, by='small') {
 #' @param reorder if TRUE, the list of clusters is reordered by most to least significant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). \code{pval.sort=TRUE} overrides \code{fc.sort=TRUE}. Default is FALSE.
+#' @param returning return one of p-values, fold changes, or both from call of \code{DEgenes()} to \code{sig()}.
 #'
 #' @return list of length 4. Each object in the list is also a list. Each list has the same length, which is the length of k arg (the number of clusters). The lists are list$k, same as input; list$sig.1, the significant genes' p-values for each cluster; list$sig.2, list$sig.1 filtered such that only genes with p value higher than p.value.2 are included. list$sig.3, list$sig.1 filtered such that each gene only appears once across the clusters, wherever it had the highest p-value.
 #' @export
@@ -208,13 +217,16 @@ hcsig <- function(k,
                   pval.adjust=NULL,
                   reorder=TRUE,
                   fc.sort=T,
-                  pval.sort=F) {
+                  pval.sort=F,
+                  returning='all') {
 
-  sig.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
-                                          adjust.method=pval.adjust, fc.sort=fc.sort, pval.sort=pval.sort),
+  SIG.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
+                                          adjust.method=pval.adjust, fc.sort=fc.sort, pval.sort=pval.sort, returning=returning),
                   simplify=FALSE,
-				          USE.NAMES=TRUE)
+                  USE.NAMES=TRUE)
 
+  fc <- SIG.1$fc
+  sig.1 <- SIG.1$pval
   sig.2 <- higher_cutoff(sig.1, cutoff = p.value.2)
   sig.3 <- most_significant(sig.1)
 
@@ -224,11 +236,12 @@ hcsig <- function(k,
       sig.1 <- sig.1[ord]
       sig.2 <- sig.2[ord]
       sig.3 <- sig.3[ord]
+      fc <- fc[ord]
     }
 
-  List <- list(k=k, sig.1=sig.1, sig.2=sig.2, sig.3=sig.3)
+  List <- list(k=k, sig.1=sig.1, sig.2=sig.2, sig.3=sig.3, fc=fc)
 
-  names(List) <- c("k", "sig.1", "sig.2", "sig.3")
+  names(List) <- c("k", "sig.1", "sig.2", "sig.3", "fc")
 
   List
 
@@ -272,5 +285,5 @@ hcsig_cut <- function(obj, n.sig.1=50, n.sig.2=10, by='both'){
     cutter <- sig.1.bool & sig.2.bool
   }
 
-  list(k=obj$k[cutter], sig.1=obj$sig.1[cutter], sig.2=obj$sig.2[cutter])
+  list(k=obj$k[cutter], sig.1=obj$sig.1[cutter], sig.2=obj$sig.2[cutter], sig.3=obj$sig.3[cutter], fc=obj$fc[cutter])
 }
