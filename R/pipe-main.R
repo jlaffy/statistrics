@@ -61,6 +61,7 @@ try_apply <- function(List, cachePath=".", FUN="main", args=NULL, pipeName=NULL,
 #' @param fc.value fold change value below which differential gene expression is deemed insignificant.
 #' @param fc.sort if TRUE, significantly differentially expressed genes are sorted by fold change (highest first). Default is TRUE.
 #' @param p.value p-value above which differential gene expression is deemed insignificant.
+#' @param returning return one of p-values, fold changes, or both from the output of \code{sig()} call.
 #' @param p.value.2 p-value above which differential gene expression is deemed insignificant with higher cutoff (sig.2)
 #' @param pval.adjust NULL or character string. If NULL, do not adjust p-values. If string, adjust p-values using the method specified.
 #' @param pval.sort if TRUE, significantly differentially expressed genes are sorted by p.value (highest first). pval.sort=TRUE overrides fc.sort=TRUE. Default is FALSE.
@@ -88,6 +89,7 @@ main <- function(mat,
                  fc.value=3,
                  fc.sort=TRUE,
                  p.value=10^(-4),
+                 returning='pval',
                  p.value.2=10^(-5),
 		             pval.adjust=NULL,
                  pval.sort=FALSE,
@@ -118,6 +120,7 @@ main <- function(mat,
                           fc.value=fc.value,
                           fc.sort=fc.sort,
                           p.value=p.value,
+                          returning=returning,
                           p.value.2=p.value.2,
                           pval.adjust=pval.adjust,
                           pval.sort=pval.sort,
@@ -155,6 +158,7 @@ main <- function(mat,
 				      mat=mat,
 					    fc.value=fc.value,
 					    p.value=p.value,
+					    returning=returning,
 					    p.value.2=p.value.2,
 				      pval.adjust=pval.adjust,
 				      fc.sort=fc.sort,

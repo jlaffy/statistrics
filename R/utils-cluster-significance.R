@@ -21,7 +21,7 @@ gene_means <- function(mat, by=1) { apply(mat, by, mean) }
 #' @return numeric vector containing FC values
 #' @export
 #'
-fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3, greater=T) {
+fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3, greater=T, return.log = FALSE) {
 
   a <- as.matrix(a)
   b <- as.matrix(b)
@@ -32,7 +32,8 @@ fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3, greater=T) {
 
   if (log) {
     logFC <- a - b
-    FC <- log.base^logFC}
+    FC <- log.base^logFC
+  }
 
   else FC <- a/b
 
@@ -42,6 +43,10 @@ fold_change <- function(a, b, log=TRUE, log.base=2, fc.value=3, greater=T) {
 
   else if (!is.null(fc.value)) {
 	return(FC[FC >= fc.value])
+  }
+
+  if (isTRUE(return.log)) {
+    return(log(FC, log.base))
   }
 
   FC
