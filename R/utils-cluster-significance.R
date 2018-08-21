@@ -230,7 +230,7 @@ hcsig <- function(k,
                   pval.sort=F,
                   returning='all') {
 
-  sig.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
+  SIG.1 <- sapply(k, function(kk) DEgenes(k=kk, mat=mat, fc.value=fc.value, p.value=p.value,
                                           adjust.method=pval.adjust, fc.sort=fc.sort, pval.sort=pval.sort, returning=returning),
                   simplify=FALSE,
                   USE.NAMES=TRUE)

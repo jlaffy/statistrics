@@ -51,7 +51,7 @@ program <- function(List, cutoff=50) {
 #' @return list (if many=F) or matrix (if many=T) of program scores
 #' @export
 #'
-score <- function(mat, programs, center=TRUE, center.rowWise=TRUE, na.rm = FALSE) {
+score <- function(mat, programs, center = FALSE, center.rowWise=TRUE, na.rm = FALSE) {
 
   result <- sapply(programs, function(program) {colMeans(mat[program, ], na.rm = na.rm)},
 #				   USE.NAMES=T,
