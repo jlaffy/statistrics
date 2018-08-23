@@ -230,7 +230,7 @@ hcsig <- function(k,
                   pval.sort=F,
                   returning='all') {
 
-  SIG.1 <- sapply(k, function(kk) DEgenes(k=kk,
+  sig.out <- sapply(k, function(kk) DEgenes(k=kk,
                                           mat=mat,
                                           fc.value=fc.value,
                                           p.value=p.value,
@@ -241,8 +241,8 @@ hcsig <- function(k,
                   simplify=FALSE,
                   USE.NAMES=TRUE)
 
-  fc <- sapply(SIG.1, `[`, 'fc')
-  sig.1 <- sapply(SIG.1, `[`, 'pval')
+  fc <- sapply(sig.out, `[`, 'fc', simplify = T, USE.NAMES = F)
+  sig.1 <- sapply(sig.out, `[`, 'pval', simplify = T, USE.NAMES = F)
   sig.2 <- higher_cutoff(sig.1, cutoff = p.value.2)
   sig.3 <- most_significant(sig.1)
 
